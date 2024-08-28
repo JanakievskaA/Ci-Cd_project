@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Task Manager</title>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <form action="/add" method="POST">
+        <input type="text" name="taskname" placeholder="Enter a new task" required>
+        <input type="text" name="tasktime" placeholder="Enter a new time" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Tasks:</h2>
+    <ul>
+        {% for task in todolist %}
+        <li>
+            {{ task.task }} - {{ task.time }} 
+           
+            <a href="/delete/{{ task._id }}">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
