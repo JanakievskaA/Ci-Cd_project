@@ -1,2 +1,4 @@
-"# Ci-Cd_project" 
-"Prva promena"
+
+# Ci-Cd_project
+Prva promena
+
