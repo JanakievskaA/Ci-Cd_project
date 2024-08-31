@@ -1,4 +1,4 @@
-name: Docker Security Scan and Push
+name: Docker Security Scan and Deploy
 
 on:
   push:
@@ -35,16 +35,21 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Deploy to server
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
         run: |
-          echo "$SSH_PRIVATE_KEY" | ssh-add -
-          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest
-            docker stop $(docker ps -q --filter ancestor=${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest)
-            docker rm $(docker ps -a -q --filter ancestor=${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest)
-            docker run -d -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest
+            docker-compose -f /path/to/your/docker-compose.yml up -d
           EOF
