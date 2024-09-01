@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Connect to MongoDB using the environment variable or default to localhost
-mongo_uri = os.getenv("MONGO_URI", "mongodb://db:27017/tasks")
+mongo_uri = os.getenv("MONGO_URI", "mongodb://db:27017/")
 client = MongoClient(mongo_uri)
 db = client["tasks"]
 todolist = db.todolist

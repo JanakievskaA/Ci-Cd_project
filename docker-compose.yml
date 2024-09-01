@@ -8,7 +8,7 @@ services:
     depends_on:
       - db
     environment:
-      - MONGO_URI=mongodb://db:27017/tasks
+      - MONGO_URI=mongodb://db:27017/
 
   db:
     image: mongo:latest
