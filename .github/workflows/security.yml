@@ -47,10 +47,14 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Copy files to Azure VM
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/azureuser/hosted_project/
+
       - name: Deploy to Azure VM
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            # Navigate to the correct directory
+            # Navigate to the project directory
             cd /home/azureuser/hosted_project/
 
             # Pull the latest Docker image
