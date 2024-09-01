@@ -8,7 +8,10 @@ services:
     depends_on:
       - db
     environment:
-      - MONGO_URI=mongodb://db:27017/
+      environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/mydb
 
   db:
     image: mongo:latest
