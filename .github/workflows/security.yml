@@ -47,9 +47,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy to server
+      - name: Deploy to Azure VM
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            # Navigate to the correct directory
+            cd /home/azureuser/hosted_project/
+
+            # Pull the latest Docker image
             docker pull anci1337/project-web:latest
-            docker-compose -f /path/to/your/docker-compose.yml up -d
+
+            # Recreate the containers using the new image
+            docker-compose up -d
           EOF
