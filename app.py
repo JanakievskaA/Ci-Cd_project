@@ -4,9 +4,9 @@ from bson import ObjectId
 
 app = Flask(__name__)
 
-# Connect to MongoDB
-client = MongoClient("mongodb://127.0.0.1:27017/")
-db = client["tasks"]
+mongo_uri = os.getenv("MONGO_URI", "mongodb://db:27017/tasks")
+client = MongoClient(mongo_uri
+db = client.get_default_database()
 todolist = db.todolist
 
 @app.route("/")
