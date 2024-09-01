@@ -24,16 +24,16 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker buildx build --tag ${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest .
+          docker buildx build --tag anci1337/project-web:latest .
 
       - name: Run Docker security scan
         uses: anchore/scan-action@v2
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest
+          image: anci1337/project-web:latest
 
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest
+          docker push anci1337/project-web:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,6 +50,6 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/project-web:latest
+            docker pull anci1337/project-web:latest
             docker-compose -f /path/to/your/docker-compose.yml up -d
           EOF
